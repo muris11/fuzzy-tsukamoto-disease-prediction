@@ -15,7 +15,8 @@ os.environ.setdefault('CORS_ORIGINS', '*')
 # Import the FastAPI application
 from api_app import app
 
-# Convert FastAPI app to WSGI application
+# Convert FastAPI to WSGI using the standard approach
+# This is the most reliable method for PythonAnywhere
 from fastapi.middleware.wsgi import WSGIMiddleware
 
 # Create WSGI application
