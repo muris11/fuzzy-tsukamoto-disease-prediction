@@ -37,6 +37,7 @@ CORS_ORIGINS=*
 ### 4. Deploy
 
 Klik **Deploy** - Vercel akan:
+
 - Install dependencies dari `requirements_vercel.txt`
 - Build serverless function
 - Deploy ke production
@@ -44,16 +45,19 @@ Klik **Deploy** - Vercel akan:
 ## 🔍 Testing Deploy
 
 ### Health Check
+
 ```bash
 curl https://your-project.vercel.app/health
 ```
 
 ### API Schema
+
 ```bash
 curl https://your-project.vercel.app/v1/schema
 ```
 
 ### Prediction Test
+
 ```bash
 curl -X POST https://your-project.vercel.app/v1/predict \
   -H "Content-Type: application/json" \
@@ -80,6 +84,7 @@ project/
 ## ⚙️ Konfigurasi Files
 
 ### vercel.json
+
 ```json
 {
   "version": 2,
@@ -108,6 +113,7 @@ project/
 ```
 
 ### api/index.py
+
 ```python
 from api_app import app
 app = app  # Export for Vercel
@@ -124,20 +130,24 @@ app = app  # Export for Vercel
 ## 🔧 Troubleshooting
 
 ### Build Error
+
 - Cek `requirements_vercel.txt`
 - Pastikan semua dependencies compatible dengan Python 3.9
 
 ### Runtime Error
+
 - Cek Vercel function logs
 - Pastikan `api/index.py` exports `app`
 
 ### CORS Issues
+
 - Cek CORS middleware di `api_app.py`
 - Update `CORS_ORIGINS` environment variable
 
 ## 🌐 URL Structure
 
 Setelah deploy:
+
 - **Base URL**: `https://your-project.vercel.app`
 - **Health**: `GET /health`
 - **Schema**: `GET /v1/schema`
@@ -147,13 +157,15 @@ Setelah deploy:
 ## 📱 Integration
 
 ### Flutter App
+
 ```dart
 const String baseUrl = 'https://your-project.vercel.app';
 ```
 
 ### Web App
+
 ```javascript
-const API_BASE = 'https://your-project.vercel.app';
+const API_BASE = "https://your-project.vercel.app";
 ```
 
 ## 🎯 Status Deploy

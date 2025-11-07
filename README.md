@@ -68,8 +68,8 @@ Sistem prediksi penyakit berbasis **Fuzzy Inference System (FIS) Tsukamoto** den
 └─────────────────┘    └─────────────────┘    └─────────────────┘
                               │
                        ┌─────────────────┐
-                       │   WSGI Adapter  │
-                       │ (PythonAnywhere)│
+                       │ Serverless Func │
+                       │    (Vercel)     │
                        └─────────────────┘
 ```
 
@@ -218,7 +218,7 @@ print(f"Scores: {result['skor']}")
 ### Base URL
 
 - **Local**: `http://localhost:8000`
-- **Production**: `https://rifqy11.pythonanywhere.com`
+- **Production**: `https://your-project.vercel.app`
 
 ### Endpoints
 
@@ -397,26 +397,33 @@ Content-Type: application/json
 
 ## 🚀 Deployment
 
-### PythonAnywhere Deployment
+### Vercel Deployment
 
-1. **Upload Files:**
+1. **Connect Repository:**
 
-   ```bash
-   # Upload to /home/rifqy11/
-   - fis_tsukamoto.py
-   - api_app.py
-   - requirements.txt
-   - .env
+   - Buka [vercel.com](https://vercel.com)
+   - Login dengan GitHub
+   - **New Project** → Import repository
+
+2. **Auto-Deploy:**
+
+   Vercel otomatis mendeteksi konfigurasi dari `vercel.json` dan deploy serverless function.
+
+3. **Production URL:**
+
+   ```
+   https://your-project.vercel.app
    ```
 
-2. **Install Dependencies:**
+### Manual Deploy (Opsional)
 
-   ```bash
-   cd /home/rifqy11/
-   python3.13 -m venv myproject
-   source myproject/bin/activate
-   pip install -r requirements.txt
-   ```
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Deploy
+vercel --prod
+```
 
 3. **Configure WSGI:**
 
@@ -748,7 +755,8 @@ print(json.dumps(result, indent=2))
 
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [Pydantic Documentation](https://pydantic.dev/)
-- [PythonAnywhere Deployment Guide](https://help.pythonanywhere.com/)
+- [Vercel Documentation](https://vercel.com/docs)
+- [Vercel Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python)
 
 ## 🏆 Acknowledgments
 
