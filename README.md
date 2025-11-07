@@ -39,6 +39,7 @@ Sistem prediksi penyakit berbasis **Fuzzy Inference System (FIS) Tsukamoto** den
 - **Clinical Pattern Recognition**: Pola klinis berbasis medical knowledge
 - **Uncertainty Handling**: Deteksi dan handling ketidakpastian
 - **Detailed Analytics**: Metadata lengkap untuk analysis
+- **Medication Recommendations**: Rekomendasi obat berbasis severity (EDUKASI SAJA)
 
 ### 🌐 REST API
 
@@ -93,7 +94,42 @@ Sistem prediksi penyakit berbasis **Fuzzy Inference System (FIS) Tsukamoto** den
    - Enhanced request parsing
    - Error handling dan debugging
 
-## 📦 Instalasi
+## � Medication Recommendations
+
+### ⚠️ **IMPORTANT MEDICAL DISCLAIMER**
+
+**REKOMENDASI OBAT HANYA UNTUK TUJUAN EDUKASI**
+**BUKAN PENGGANTI KONSULTASI MEDIS PROFESIONAL**
+
+### 🔴 **Bahaya Self-Medication:**
+
+- ❌ Jangan gunakan rekomendasi tanpa resep dokter
+- ❌ Setiap individu memiliki kondisi kesehatan berbeda
+- ❌ Interaksi obat dapat berbahaya
+- ❌ Overdosis dapat menyebabkan kematian
+
+### ✅ **Fitur Medication Recommendations:**
+
+- **Severity-based**: Rekomendasi berdasarkan tingkat keparahan (mild/moderate/severe)
+- **Evidence-based**: Berdasarkan pedoman medis umum
+- **Comprehensive**: Termasuk dosis, efek samping, peringatan
+- **Emergency Signs**: Tanda bahaya yang memerlukan perhatian medis segera
+
+### 🏥 **Selalu Konsultasikan:**
+
+- Dokter untuk diagnosis akurat
+- Apoteker untuk interaksi obat
+- Tenaga kesehatan profesional
+
+### 🚨 **Gejala Darurat - Segera ke RS:**
+
+- Sesak napas berat
+- Perdarahan tidak normal
+- Demam tinggi tidak turun
+- Kehilangan kesadaran
+- Nyeri dada berat
+
+## �📦 Instalasi
 
 ### Prerequisites
 
@@ -319,6 +355,41 @@ Content-Type: application/json
     "fatigue": 7.0
   },
   "rekomendasi": "⚠️ Skor tinggi. Disarankan segera konsultasi ke fasilitas kesehatan.",
+  "rekomendasi_obat": {
+    "disease": "Influenza",
+    "category": "Viral Respiratory Infection",
+    "severity_level": "moderate",
+    "severity_score": 92.75,
+    "medications": [
+      {
+        "name": "Paracetamol",
+        "dosage": "500-1000mg setiap 4-6 jam (maksimal 4000mg/hari)",
+        "purpose": "Menurunkan demam dan nyeri",
+        "duration": "3-5 hari atau sampai demam turun",
+        "side_effects": "Jarang: ruam kulit, mual",
+        "warnings": "Jangan berlebihan, hati-hati dengan penyakit hati"
+      },
+      {
+        "name": "Ibuprofen",
+        "dosage": "200-400mg setiap 6-8 jam",
+        "purpose": "Mengurangi demam, nyeri, dan peradangan",
+        "duration": "3-5 hari",
+        "side_effects": "Mual, sakit perut, pusing",
+        "warnings": "Hati-hati dengan tukak lambung, ginjal"
+      }
+    ],
+    "general_advice": "Istirahat total, minum banyak cairan, makan makanan bergizi",
+    "emergency_signs": [
+      "Sesak napas",
+      "Nyeri dada",
+      "Demam tinggi tidak turun",
+      "Kejang",
+      "Kehilangan kesadaran"
+    ],
+    "disclaimer": "⚠️ PENTING: Rekomendasi obat ini untuk EDUKASI saja. BUKAN pengganti diagnosis dan pengobatan medis profesional. Selalu konsultasikan dengan dokter sebelum mengonsumsi obat apapun. Self-medication dapat berbahaya.",
+    "warning": "🚨 Jika mengalami gejala darurat, segera ke fasilitas kesehatan terdekat atau hubungi ambulance.",
+    "note": "💊 Obat-obatan harus sesuai resep dokter dan kondisi kesehatan individu. Dosis dapat bervariasi berdasarkan usia, berat badan, dan kondisi kesehatan."
+  },
   "timestamp": "2025-10-18T15:55:26.904788",
   "api_version": "enhanced_v1"
 }

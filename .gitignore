@@ -22,6 +22,42 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Local development
+.env.local
+.env.development
+
+# Deployment files (keep for reference but not needed in repo)
+test_pythonanywhere.py
+deploy_pythonanywhere.sh
+.installed.cfg
+*.egg
+MANIFEST
+
 # PyInstaller
 *.manifest
 *.spec

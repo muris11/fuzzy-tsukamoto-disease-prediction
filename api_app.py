@@ -6,7 +6,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
-from fis_tsukamoto import Diagnoser, LABEL_ID, render_report_html
+from fis_tsukamoto import Diagnoser, LABEL_ID, render_report_html, get_medication_recommendations
 
 load_dotenv()
 APP_NAME = os.getenv("APP_NAME", "Fuzzy Tsukamoto Diagnoser API")
@@ -16,8 +16,30 @@ DEFAULT_WARNING_THRESHOLD = float(os.getenv("WARNING_THRESHOLD", "60"))
 app = FastAPI(
     title=APP_NAME,
     version="1.0.0",
-    description="REST API Prediksi Penyakit berbasis Fuzzy Tsukamoto (Bahasa Indonesia). "
-                "DISCLAIMER: Edukasi/akademik; bukan diagnosis klinis."
+    description="""REST API Prediksi Penyakit berbasis Fuzzy Tsukamoto (Bahasa Indonesia).
+
+## ⚠️ PENTING - MEDICAL DISCLAIMER
+
+**SISTEM INI HANYA UNTUK TUJUAN EDUKASI & AKAMEMIK**
+**BUKAN PENGGANTI DIAGNOSIS MEDIS PROFESIONAL**
+
+### 🔴 Bahaya Self-Medication:
+- Jangan gunakan rekomendasi obat tanpa konsultasi dokter
+- Setiap orang memiliki kondisi kesehatan yang berbeda
+- Obat yang tepat untuk satu orang bisa berbahaya untuk orang lain
+- Overdosis atau penggunaan salah dapat menyebabkan kematian
+
+### 🏥 Selalu Konsultasi:
+- Dokter spesialis untuk diagnosis yang akurat
+- Apoteker untuk interaksi obat
+- Tenaga kesehatan profesional untuk pengobatan
+
+### 🚨 Gejala Darurat:
+- Segera ke rumah sakit jika mengalami gejala berat
+- Jangan tunda pengobatan medis yang diperlukan
+
+**Disclaimer: Edukasi/akademik; bukan diagnosis klinis. Gunakan atas risiko sendiri.**
+"""
 )
 
 origins = os.getenv("CORS_ORIGINS", "*").split(",")
@@ -72,6 +94,7 @@ class PredictResponse(BaseModel):
     masukan_skala_0_10: Dict[str, float]
     detail_aturan: Optional[Dict[str, List[Dict]]] = None
     rekomendasi: str
+    rekomendasi_obat: Optional[Dict] = None  # New field for medication recommendations
     timestamp: Optional[str] = None
     api_version: str = "enhanced_v1"
 
@@ -90,7 +113,7 @@ def health():
 
 @app.get(f"/{API_VERSION}/schema", response_model=SchemaResponse)
 def get_schema():
-    options = ["tidak", "ringan", "sedang", "berat", "sangat berat", "kadang", "sering", "ya"]
+    options = ["tidak", "ya", "kadang", "sering", "ringan", "sedang", "berat", "sangat berat"]
     questions = [
         QuestionnaireItem(key=k, label=LABEL_ID[k], options=options, default="tidak")
         for k in LABEL_ID.keys()
@@ -110,15 +133,26 @@ def predict(payload: PredictRequest):
         confidence = top.get("confidence", 0)
         
         if skor >= payload.ambang_peringatan:
-            rekom = "⚠️ Skor tinggi. Disarankan segera konsultasi ke fasilitas kesehatan."
+            rekom = "Skor tinggi. Disarankan segera konsultasi ke fasilitas kesehatan."
         elif skor >= 40:
             rekom = "Istirahat & hidrasi cukup. Konsultasi jika tidak membaik."
         else:
             rekom = "Pantau gejala. Jika memburuk, konsultasi ke tenaga kesehatan."
-        
+
         # Add confidence-based recommendation
-        if confidence < 0.6:
-            rekom += f" (Confidence: {confidence:.1%} - Hasil kurang pasti)"
+        if confidence < 0.95:
+            rekom += f" (Kepercayaan: {confidence:.1%})"
+        elif confidence < 0.98:
+            rekom += f" (Kepercayaan: {confidence:.1%})"
+        else:
+            rekom += f" (Kepercayaan: {confidence:.1%})"
+
+    # Get medication recommendations if diagnosis exists
+    medication_recommendations = None
+    if top and top.get("skor", 0) >= 30:  # Only show medications for significant scores
+        disease_name = top.get("penyakit", "")
+        severity_score = top.get("skor", 0)
+        medication_recommendations = get_medication_recommendations(disease_name, severity_score)
     
     from datetime import datetime
     
@@ -132,6 +166,7 @@ def predict(payload: PredictRequest):
         "masukan_skala_0_10": result.get("masukan_skala_0_10") or result.get("input_terbaca_skala_0_10", {}),
         "detail_aturan": result.get("detail_aturan") if payload.include_detail_rules else None,
         "rekomendasi": rekom,
+        "rekomendasi_obat": medication_recommendations,
         "timestamp": datetime.now().isoformat(),
         "api_version": "enhanced_v1"
     }
